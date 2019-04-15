@@ -26,6 +26,15 @@ const burger = ({ ingredients }) => {
 
 		.reduce((arr, el) => arr.concat(el), []);
 
+		// 154
+		// const renderContent = obj => {
+		// 	// if (!purchasable) return <p>Start adding ingredients</p>;
+		// 	return Object.entries(obj).map(entry =>
+		// 		Array.from(Array(entry[1])).map(() => (
+		// 			<BurgerIngredient key={uuidv4()} type={entry[0]} />
+		// 		))
+		// 	);
+		// };
 	// console.log(transformedIngredients);
 
 	if (transformedIngredients.length === 0) {
@@ -36,6 +45,7 @@ const burger = ({ ingredients }) => {
 		<div className={classes.Burger}>
 			<BurgerIngredient type="bread-top" />
 			{transformedIngredients}
+			{/* {renderContent(ingredients)} */}
 			<BurgerIngredient type="bread-bottom" />
 		</div>
 	);
