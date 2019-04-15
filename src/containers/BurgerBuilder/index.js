@@ -76,7 +76,7 @@ export default () => {
 	return (
 		<Aux>
 			<Modal show={purchasing} modalClosed={purchaseCanselHandler} >
-				<OrderSummary ingredients={ingredients} 
+				<OrderSummary ingredients={ingredients} price={price}
 				purchaseCanselled={purchaseCanselHandler} purchaseContinued={purchaseContinueHandler} />
 			</Modal>
 			<Burger ingredients={ingredients} purchasable={purchasable} />

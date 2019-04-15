@@ -1,11 +1,12 @@
 import React from 'react';
 
 import Aux from '../../hoc/Aux';
+import Toolbar from '../Navigation/Toolbar';
 
 export default ({children}) => {
 	return (
 		<Aux>
-			<div>Toolbar, SideDrawer, Backdrop</div>
+			<Toolbar />
 			<main>{children} </main>
 		</Aux>
 	);
