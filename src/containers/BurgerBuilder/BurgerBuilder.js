@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger/Burger';
@@ -11,77 +11,64 @@ const INGREDIENT_PRICES = {
 	bacon: 0.7
 };
 
-class BurgerBuilder extends Component {
-	state = {
-		ingredients: {
-			salad: 0,
-			bacon: 0,
-			cheese: 0,
-			meat: 0
-		},
-		totalPrice: 4,
-		purchasable: false
+const burgerBuilder = (props) => {
+	const InitialIngredients = {
+		salad: 0,
+		bacon: 0,
+		cheese: 0,
+		meat: 0
 	};
+	const [ ingredients, setIngredients ] = useState(InitialIngredients);
+	const [ price, setPrice ] = useState(4);
+	const [ purchasable, setPurchasable ] = useState(false);
 
-	updatePurchaseState(ingredients) {
-		// const sum = Object.values(ingredients).reduce((acc, elem) => {
-		//   return acc + elem;
-		// }, 0);
-
-		const sum = Object.keys(ingredients).map((ing) => ingredients[ing]).reduce((acc, elem) => {
+	const updatePurchaseState = (ingredients) => {
+		const sum = Object.values(ingredients).reduce((acc, elem) => {
 			return acc + elem;
 		}, 0);
 
-		// this.setState({ purchasable: sum === 0 ? false : true });
-		this.setState({ purchasable: sum > 0 });
-	}
-
-	addIngredientHandler = (type) => {
-		const updatedIngredients = {
-			...this.state.ingredients,
-			...this.state.ingredients[type] = this.state.ingredients[type] + 1
-		};
-		const newPrice = this.state.totalPrice + INGREDIENT_PRICES[type];
-		this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
-		this.updatePurchaseState(updatedIngredients);
-
+		setPurchasable(sum > 0); // This is either true/false
 	};
 
-	removeIngredientHandler = (type) => {
+	const addIngredientHandler = (type) => {
 		const updatedIngredients = {
-			...this.state.ingredients,
-			...this.state.ingredients[type] = this.state.ingredients[type] - 1
+			...ingredients,
+			...ingredients[type] = ingredients[type] + 1
 		};
-		const newPrice = this.state.totalPrice - INGREDIENT_PRICES[type];
-		this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
-		this.updatePurchaseState(updatedIngredients);
-
+		setIngredients(updatedIngredients);
+		setPrice(price + INGREDIENT_PRICES[type] )
+		updatePurchaseState(updatedIngredients);
 	};
 
-	
-
-	render() {
-		// This is for the less button. So values don't get a minus value.
-		const disabledInfo = {
-			...this.state.ingredients
+	const removeIngredientHandler = (type) => {
+		const updatedIngredients = {
+			...ingredients,
+			...(ingredients[type] = ingredients[type] - 1)
 		};
-		for (let key in disabledInfo) {
-			disabledInfo[key] = disabledInfo[key] <= 0;
-		}
-		return (
-			<Aux>
-				<Burger ingredients={this.state.ingredients} purchasable={this.state.purchasable} />
-				<BuildControls
-					ingredientAdded={this.addIngredientHandler}
-					ingredientRemoved={this.removeIngredientHandler}
-					disabled={disabledInfo}
-					price={this.state.totalPrice}
-					purchasable={this.state.purchasable}
+		setIngredients(updatedIngredients);
+		setPrice(price - INGREDIENT_PRICES[type] )
+		updatePurchaseState(updatedIngredients);
+	};
 
-				/>
-			</Aux>
-		);
+	// This is for the less button. So values don't get a minus value.
+	const disabledInfo = {
+		...ingredients
+	};
+	for (let key in disabledInfo) {
+		disabledInfo[key] = disabledInfo[key] <= 0;
 	}
-}
+	return (
+		<Aux>
+			<Burger ingredients={ingredients} purchasable={purchasable} />
+			<BuildControls
+				ingredientAdded={addIngredientHandler}
+				ingredientRemoved={removeIngredientHandler}
+				disabled={disabledInfo}
+				price={price}
+				purchasable={purchasable}
+			/>
+		</Aux>
+	);
+};
 
-export default BurgerBuilder;
+export default burgerBuilder;
