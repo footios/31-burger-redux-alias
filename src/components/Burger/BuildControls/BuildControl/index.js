@@ -2,7 +2,7 @@ import React from "react";
 import classes from "./BuildControl.module.css";
 
 // child of Buildcontrols
-const buildControl = ({label, removed, added, disabled}) => (
+export default ({label, removed, added, disabled}) => (
   <div className={classes.BuildControl}>
     <div className={classes.Label}>{label}</div>
     <button
@@ -18,4 +18,4 @@ const buildControl = ({label, removed, added, disabled}) => (
   </div>
 );
 
-export default buildControl;
+

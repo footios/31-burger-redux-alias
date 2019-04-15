@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Layout from './components/Layout';
-import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import BurgerBuilder from './containers/BurgerBuilder';
 
 const app = props => {
 		return (

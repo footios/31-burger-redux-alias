@@ -3,10 +3,10 @@ import React from 'react';
 import uuidv4 from 'uuid/v4';
 
 import classes from './Burger.module.css';
-import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
+import BurgerIngredient from './BurgerIngredient';
 
 // child of BurgerBuilder
-const burger = ({ ingredients, purchasable }) => {
+export default ({ ingredients, purchasable }) => {
 
 		// 154 Code from Q&A
 		const renderContent = obj => {
@@ -27,4 +27,4 @@ const burger = ({ ingredients, purchasable }) => {
 	);
 };
 
-export default burger;
+

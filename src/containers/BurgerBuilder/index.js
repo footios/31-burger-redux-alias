@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import Aux from '../../hoc/Aux';
-import Burger from '../../components/Burger/Burger';
-import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Burger from '../../components/Burger';
+import BuildControls from '../../components/Burger/BuildControls';
 
 const INGREDIENT_PRICES = {
 	salad: 0.5,
@@ -11,7 +11,7 @@ const INGREDIENT_PRICES = {
 	bacon: 0.7
 };
 
-const burgerBuilder = (props) => {
+export default () => {
 	const InitialIngredients = {
 		salad: 0,
 		bacon: 0,
@@ -70,5 +70,3 @@ const burgerBuilder = (props) => {
 		</Aux>
 	);
 };
-
-export default burgerBuilder;

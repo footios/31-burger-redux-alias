@@ -1,6 +1,6 @@
 import React from "react";
 
-import BuildControl from "./BuildControl/BuildControl";
+import BuildControl from "./BuildControl";
 
 import classes from './BuildControls.module.css'
 
@@ -11,7 +11,8 @@ const controls = [
   { label: "Meat", type: "meat" }
 ];
 
-const buildControls = ({price, disabled, ingredientAdded, ingredientRemoved, purchasable }) => {
+
+export default ({price, disabled, ingredientAdded, ingredientRemoved, purchasable }) => {
 
   // let button = 'START ADDING INGREDIENTS'
   // if (props.isAuth) {
@@ -48,4 +49,3 @@ const buildControls = ({price, disabled, ingredientAdded, ingredientRemoved, pur
   
 
 
-export default buildControls;
