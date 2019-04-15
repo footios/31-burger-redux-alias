@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import Layout from './components/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 
-class App extends Component {
-	render() {
+const app = props => {
 		return (
 			<div className="App">
 				<Layout>
@@ -13,6 +12,6 @@ class App extends Component {
 			</div>
 		);
 	}
-}
 
-export default App;
+
+export default app;

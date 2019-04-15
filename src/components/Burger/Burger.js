@@ -8,7 +8,7 @@ import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 // child of BurgerBuilder
 const burger = ({ ingredients, purchasable }) => {
 
-		// 154
+		// 154 Code from Q&A
 		const renderContent = obj => {
 			if (!purchasable) return <p>Start adding ingredients</p>;
 			return Object.entries(obj).map(entry =>

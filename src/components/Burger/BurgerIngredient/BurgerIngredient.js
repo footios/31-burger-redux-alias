@@ -1,12 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import classes from "./BurgerIngredient.module.css";
 import PropTypes from "prop-types";
 
-class BurgerIngredient extends Component {
-  render() {
+const burgerIngredient = ({type}) => {
     let ingredient = null;
 
-    switch (this.props.type) {
+    switch (type) {
       case "bread-bottom":
         ingredient = <div className={classes.BreadBottom} />;
         break;
@@ -35,14 +34,14 @@ class BurgerIngredient extends Component {
     }
     return ingredient;
   }
-}
+
 // Reasons to use PropTypes:
 // working on a project which is going to get used by other people,
 // working on a third party library,
 // working in a developer team.
 
-BurgerIngredient.propTypes = {
+burgerIngredient.propTypes = {
   type: PropTypes.string.isRequired
 };
 
-export default BurgerIngredient;
+export default burgerIngredient;
