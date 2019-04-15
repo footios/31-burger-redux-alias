@@ -12,7 +12,7 @@ const controls = [
 ];
 
 
-export default ({price, disabled, ingredientAdded, ingredientRemoved, purchasable }) => {
+export default ({price, disabled, ingredientAdded, ingredientRemoved, purchasable, purchasing}) => {
 
   // let button = 'START ADDING INGREDIENTS'
   // if (props.isAuth) {
@@ -37,7 +37,7 @@ export default ({price, disabled, ingredientAdded, ingredientRemoved, purchasabl
     <button
       className={classes.OrderButton}
       disabled={!purchasable}
-      // onClick={props.ordered}
+      onClick={purchasing}
     >
     {/* {button} */}
     ORDER
