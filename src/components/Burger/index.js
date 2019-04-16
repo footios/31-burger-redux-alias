@@ -2,7 +2,7 @@ import React from 'react';
 // import { withRouter } from 'react-router-dom'
 import uuidv4 from 'uuid/v4';
 
-import classes from './Burger.module.css';
+import classes from './index.module.css';
 import BurgerIngredient from './BurgerIngredient';
 
 // child of BurgerBuilder

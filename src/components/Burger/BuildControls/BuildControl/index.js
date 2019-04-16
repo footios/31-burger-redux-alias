@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./BuildControl.module.css";
+import classes from "./index.module.css";
 
 // child of Buildcontrols
 export default ({label, removed, added, disabled}) => (

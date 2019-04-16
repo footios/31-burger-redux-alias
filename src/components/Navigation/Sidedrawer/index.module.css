@@ -1,0 +1,34 @@
+.SideDrawer {
+    position: fixed;
+    width: 280px;
+    max-width: 70%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 200; /* the backdrop is 100, so the sideDrawer should be above it. */
+    background-color: white;
+    padding: 32px 16px;
+    box-sizing: border-box; /* to adjust the sizing to the padding */
+    transition: transform 0.3s ease-out;
+  }
+  
+  @media (min-width: 500px) {
+    .SideDrawer {
+      display: none;
+    }
+  }
+  
+  /* will be attached conditionaly to play animation */
+  .Open {
+    transform: translateX(0); /* shift sideDrawer into the above position */
+  }
+  
+  .Close {
+    transform: translate(-100%);
+  }
+  
+  .Logo {
+    height: 11%;
+    margin-bottom: 32px;
+  }
+  
