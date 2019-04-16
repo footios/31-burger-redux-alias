@@ -26,7 +26,7 @@ export default ({ingredients, price, purchasable, purchaseCanselled, purchaseCon
       <p>Burger ingredients:</p>
       <ul>{ingredientSummary}</ul>
       <p>
-        <strong>Total Price: {price}</strong>
+        <strong>Total Price: {price.toFixed(2)}</strong>
       </p>
       <p>Continue to Checkout?</p>
       <Button btnType="Danger" clicked={purchaseCanselled}>

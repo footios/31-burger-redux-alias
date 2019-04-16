@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import axios from '../../axios-orders'
+import axios from '../../axios-orders';
 
 import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger';
 import BuildControls from '../../components/Burger/BuildControls';
 import Modal from '../../components/UI/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary';
+import Spinner from '../../components/UI/Spinner';
 
 const INGREDIENT_PRICES = {
 	salad: 0.5,
@@ -25,6 +26,7 @@ export default () => {
 	const [ price, setPrice ] = useState(4);
 	const [ purchasable, setPurchasable ] = useState(false);
 	const [ purchasing, setPurchasing ] = useState(false);
+	const [ loading, setLoading ] = useState(false);
 
 	const updatePurchaseState = (ingredients) => {
 		const sum = Object.values(ingredients).reduce((acc, elem) => {
@@ -47,18 +49,21 @@ export default () => {
 			ingredinets: ingredients,
 			price: price,
 			customer: {
-			  name: "Foti",
-			  address: {
-				street: "testStreet 1",
-				zipCode: "2356",
-				country: "Greece"
-			  },
-			  email: "test@otest.com"
+				name: 'Foti',
+				address: {
+					street: 'testStreet 1',
+					zipCode: '2356',
+					country: 'Greece'
+				},
+				email: 'test@otest.com'
 			},
-			deliveryMethod: "fastest"
-		  };
+			deliveryMethod: 'fastest'
+		};
+		setLoading(true);
 
 		axios.post('/orders.json', order)
+		.then(() => setLoading(false))
+		.catch((error) => console.log(error));
 	};
 
 	const addIngredientHandler = (type) => {
@@ -88,16 +93,24 @@ export default () => {
 	for (let key in disabledInfo) {
 		disabledInfo[key] = disabledInfo[key] <= 0;
 	}
+
+	let orderSummary = (
+		<OrderSummary
+			ingredients={ingredients}
+			price={price}
+			purchasable={purchasable}
+			purchaseCanselled={purchaseCanselHandler}
+			purchaseContinued={purchaseContinueHandler}
+		/>
+	);
+
+	if (loading) {
+		orderSummary = <Spinner />;
+	}
 	return (
 		<Aux>
 			<Modal show={purchasing} modalClosed={purchaseCanselHandler}>
-				<OrderSummary
-					ingredients={ingredients}
-					price={price}
-					purchasable={purchasable}
-					purchaseCanselled={purchaseCanselHandler}
-					purchaseContinued={purchaseContinueHandler}
-				/>
+				{orderSummary}
 			</Modal>
 			<Burger ingredients={ingredients} purchasable={purchasable} />
 			<BuildControls
