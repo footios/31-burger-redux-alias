@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 import Aux from '../../hoc/Aux';
-import Toolbar from '../Navigation/Toolbar';
-import Sidedrawer from '../Navigation/Sidedrawer';
+import Toolbar from '../../components/Navigation/Toolbar';
+import Sidedrawer from '../../components/Navigation/Sidedrawer';
 
 export default ({children}) => {
 
-	const [showSideDrawer, setShowSideDrawer] = useState(true)
+	const [showSideDrawer, setShowSideDrawer] = useState(false)
 
 	const sideDrawerHandler = () => {
 		setShowSideDrawer(false)

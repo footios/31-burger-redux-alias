@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger';
 import BuildControls from '../../components/Burger/BuildControls';
-import Modal from '../../components/UI/Modal'
-import OrderSummary from '../../components/Burger/OrderSummary'
+import Modal from '../../components/UI/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary';
 
 const INGREDIENT_PRICES = {
 	salad: 0.5,
@@ -34,25 +34,24 @@ export default () => {
 	};
 
 	const purchaseHandler = () => {
-		setPurchasing(true)
-	}
+		setPurchasing(true);
+	};
 
 	const purchaseCanselHandler = () => {
-		setPurchasing(false)
+		setPurchasing(false);
 	};
 
 	const purchaseContinueHandler = () => {
 		alert('You continue!');
 	};
 
-
 	const addIngredientHandler = (type) => {
 		const updatedIngredients = {
 			...ingredients,
-			...ingredients[type] = ingredients[type] + 1
+			...(ingredients[type] = ingredients[type] + 1)
 		};
 		setIngredients(updatedIngredients);
-		setPrice(price + INGREDIENT_PRICES[type] )
+		setPrice(price + INGREDIENT_PRICES[type]);
 		updatePurchaseState(updatedIngredients);
 	};
 
@@ -62,7 +61,7 @@ export default () => {
 			...(ingredients[type] = ingredients[type] - 1)
 		};
 		setIngredients(updatedIngredients);
-		setPrice(price - INGREDIENT_PRICES[type] )
+		setPrice(price - INGREDIENT_PRICES[type]);
 		updatePurchaseState(updatedIngredients);
 	};
 
@@ -75,9 +74,14 @@ export default () => {
 	}
 	return (
 		<Aux>
-			<Modal show={purchasing} modalClosed={purchaseCanselHandler} >
-				<OrderSummary ingredients={ingredients} price={price}
-				purchaseCanselled={purchaseCanselHandler} purchaseContinued={purchaseContinueHandler} />
+			<Modal show={purchasing} modalClosed={purchaseCanselHandler}>
+				<OrderSummary
+					ingredients={ingredients}
+					price={price}
+					purchasable={purchasable}
+					purchaseCanselled={purchaseCanselHandler}
+					purchaseContinued={purchaseContinueHandler}
+				/>
 			</Modal>
 			<Burger ingredients={ingredients} purchasable={purchasable} />
 			<BuildControls

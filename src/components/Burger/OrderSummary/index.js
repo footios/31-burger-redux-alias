@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import uuidv4 from "uuid/v4";
 
 import Aux from "../../../hoc/Aux";
 import Button from "../../UI/Button";
 
 // child of BurgerBuiler
-export default ({ingredients, price, purchaseCanselled, purchaseContinued}) => {
+export default ({ingredients, price, purchasable, purchaseCanselled, purchaseContinued}) => {
+
+  useEffect(() => {
+		console.log('OrderSummary updates')
+    }, [purchasable])
+    
   const ingredientSummary = Object.keys(ingredients).map((igkey, i) => {
     return (
       <li key={uuidv4()} style={{ textTransform: "capitalize", listStyleType: 'none' }}>
