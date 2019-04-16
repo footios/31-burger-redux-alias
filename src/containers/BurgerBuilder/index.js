@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from '../../axios-orders'
 
 import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger';
@@ -42,7 +43,22 @@ export default () => {
 	};
 
 	const purchaseContinueHandler = () => {
-		alert('You continue!');
+		const order = {
+			ingredinets: ingredients,
+			price: price,
+			customer: {
+			  name: "Foti",
+			  address: {
+				street: "testStreet 1",
+				zipCode: "2356",
+				country: "Greece"
+			  },
+			  email: "test@otest.com"
+			},
+			deliveryMethod: "fastest"
+		  };
+
+		axios.post('/orders.json', order)
 	};
 
 	const addIngredientHandler = (type) => {
