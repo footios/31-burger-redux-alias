@@ -11,9 +11,13 @@ export default ({children}) => {
 	const sideDrawerHandler = () => {
 		setShowSideDrawer(false)
 	}
+
+	const drawerToggleHandler = () => {
+		setShowSideDrawer(true)
+	}
 	return (
 		<Aux>
-			<Toolbar />
+			<Toolbar drawerToggleClicked={drawerToggleHandler} />
 			<Sidedrawer open={showSideDrawer} closed={sideDrawerHandler} />
 			<main>{children} </main>
 		</Aux>
