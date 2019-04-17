@@ -25,10 +25,18 @@ const burgerBuilder = (props) => {
 	const [ error, setError ] = useState(false);
 
 	useEffect(() => {
-		console.log('Burgerbuilder ', props)
-		axios.get('/ingredients.json').then((response) => setIngredients(response.data)).catch((error) => {
-			setError(true);
-		});
+		setLoading(true);
+		console.log('Burgerbuilder ', props);
+		axios
+			.get('/ingredients.json')
+			.then((response) => {
+				setIngredients(response.data);
+				setLoading(false);
+			})
+			.catch((error) => {
+				setError(true);
+				setLoading(false);
+			});
 	}, []);
 
 	const updatePurchaseState = (ingredients) => {
@@ -48,9 +56,8 @@ const burgerBuilder = (props) => {
 	};
 
 	const purchaseContinueHandler = () => {
-		
 		// const order = {
-		// 	ingredinets: ingredients,
+		// 	ingredients: ingredients,
 		// 	price: price,
 		// 	customer: {
 		// 		name: 'Foti',
@@ -72,6 +79,22 @@ const burgerBuilder = (props) => {
 		// 		setPurchasing(false);
 		// 	})
 		// 	.catch((error) => console.log(error));
+
+		const queryParams = [];
+		// get the ingredients and store them in an array
+		for (const i in ingredients) {
+			if (ingredients.hasOwnProperty(i)) {
+				queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i]));
+			}
+		}
+		// We need the price for the Checkout. So we push it here:
+		queryParams.push('price=' + price);
+		// save the ingredients as a string and assign it to the search query
+		const queryString = queryParams.join('&');
+		props.history.push({
+			pathname: '/checkout',
+			search: '?' + queryString
+		});
 	};
 
 	const addIngredientHandler = (type) => {
@@ -121,7 +144,7 @@ const burgerBuilder = (props) => {
 		burger = <Spinner />;
 	} else if (error) {
 		burger = (
-			<div  style={{ marginTop: '20vh', textAlign: 'center' }} >
+			<div style={{ marginTop: '20vh', textAlign: 'center' }}>
 				<h1>Ingredients can't be loaded.</h1>
 				<p>Please check internet connection.</p>
 			</div>

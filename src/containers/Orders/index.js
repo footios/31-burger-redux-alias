@@ -15,7 +15,7 @@ class Orders extends Component {
 		axios
 			.get('/orders.json')
 			.then((res) => {
-				console.log('Orders: ', res.data); // Why is 'data' what we get back from Firebase?
+				console.log('Orders: ', res.data); 
 				//convert the object into an array:
 				const fetchedOrders = [];
 				for (const key in res.data) {
