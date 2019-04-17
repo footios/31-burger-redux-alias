@@ -23,7 +23,6 @@ export default (WrappedComponent, axios) => {
 
 			return () => {
 				console.log('Will Unmount', reqInterceptor, resInterceptor);
-
 				axios.interceptors.request.eject(reqInterceptor);
 				axios.interceptors.request.eject(resInterceptor);
 			};

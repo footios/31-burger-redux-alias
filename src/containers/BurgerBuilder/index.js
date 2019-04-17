@@ -16,7 +16,7 @@ const INGREDIENT_PRICES = {
 	bacon: 0.7
 };
 
-const burgerBuilder = () => {
+const burgerBuilder = (props) => {
 	const [ ingredients, setIngredients ] = useState(null);
 	const [ price, setPrice ] = useState(4);
 	const [ purchasable, setPurchasable ] = useState(false);
@@ -25,6 +25,7 @@ const burgerBuilder = () => {
 	const [ error, setError ] = useState(false);
 
 	useEffect(() => {
+		console.log('Burgerbuilder ', props)
 		axios.get('/ingredients.json').then((response) => setIngredients(response.data)).catch((error) => {
 			setError(true);
 		});
@@ -47,29 +48,30 @@ const burgerBuilder = () => {
 	};
 
 	const purchaseContinueHandler = () => {
-		const order = {
-			ingredinets: ingredients,
-			price: price,
-			customer: {
-				name: 'Foti',
-				address: {
-					street: 'testStreet 1',
-					zipCode: '2356',
-					country: 'Greece'
-				},
-				email: 'test@otest.com'
-			},
-			deliveryMethod: 'fastest'
-		};
-		setLoading(true);
+		
+		// const order = {
+		// 	ingredinets: ingredients,
+		// 	price: price,
+		// 	customer: {
+		// 		name: 'Foti',
+		// 		address: {
+		// 			street: 'testStreet 1',
+		// 			zipCode: '2356',
+		// 			country: 'Greece'
+		// 		},
+		// 		email: 'test@otest.com'
+		// 	},
+		// 	deliveryMethod: 'fastest'
+		// };
+		// setLoading(true);
 
-		axios
-			.post('/orders.json', order)
-			.then(() => {
-				setLoading(false);
-				setPurchasing(false);
-			})
-			.catch((error) => console.log(error));
+		// axios
+		// 	.post('/orders.json', order)
+		// 	.then(() => {
+		// 		setLoading(false);
+		// 		setPurchasing(false);
+		// 	})
+		// 	.catch((error) => console.log(error));
 	};
 
 	const addIngredientHandler = (type) => {
