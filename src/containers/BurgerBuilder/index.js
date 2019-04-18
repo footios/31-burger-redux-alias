@@ -16,7 +16,7 @@ const INGREDIENT_PRICES = {
 	bacon: 0.7
 };
 
-const burgerBuilder = (props) => {
+export default withErrorHandler ((props)=> {
 	const [ ingredients, setIngredients ] = useState(null);
 	const [ price, setPrice ] = useState(4);
 	const [ purchasable, setPurchasable ] = useState(false);
@@ -166,6 +166,6 @@ const burgerBuilder = (props) => {
 			/>
 		</Aux>
 	);
-};
+}
+, axios) 
 
-export default withErrorHandler(burgerBuilder, axios);
