@@ -114,7 +114,7 @@ export default (props) => {
 			.then((response) => setLoading(false))
 			.then((error) => setLoading(false));
 
-		this.props.history.push('/');
+		props.history.push('/');
 	};
 
 	const checkValidity = (value, rules) => {
