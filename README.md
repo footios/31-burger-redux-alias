@@ -8,4 +8,5 @@ We use:
 * Object destructuring in props,
 * `index.js` for all files (in their particular folder) and we export them like: `export default () => {...}`
 
-We stoped at Section 15 (Adding Redux).
+Here we take it from 30-burger-alias.
+We start from Section 15 (Adding Redux).

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../axios-orders';
+import { connect } from 'react-redux';
 
 import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger';
@@ -8,164 +9,101 @@ import Modal from '../../components/UI/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary';
 import Spinner from '../../components/UI/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler';
+import * as actions from '../../store/actions/';
 
-const INGREDIENT_PRICES = {
-	salad: 0.5,
-	cheese: 0.4,
-	meat: 1.3,
-	bacon: 0.7
+export default connect(mapStateToProps, mapDispatchToProps)(
+	withErrorHandler((props) => {
+		const [ purchasing, setPurchasing ] = useState(false);
+
+		useEffect(() => {
+			props.onInitIngredients();
+		}, []);
+
+		const updatePurchaseState = (ingredients) => {
+			const sum = Object.keys(ingredients)
+				.map((igKey) => {
+					return ingredients[igKey];
+				})
+				.reduce((sum, el) => {
+					return sum + el;
+				}, 0);
+			return sum > 0;
+		};
+
+		const purchaseHandler = () => {
+			setPurchasing(true);
+		};
+
+		const purchaseCanselHandler = () => {
+			setPurchasing(false);
+		};
+
+		const purchaseContinueHandler = () => {
+			props.onInitPurchase();
+			props.history.push('/checkout');
+		};
+
+		// This is for the less button. So values don't get a minus value.
+		const disabledInfo = {
+			...ingredients
+		};
+		// Here we assing to the value a boolean => true/false
+		for (let key in disabledInfo) {
+			disabledInfo[key] = disabledInfo[key] <= 0;
+		}
+
+		let orderSummary = null;
+		let burger = props.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
+
+		if (props.ings) {
+			burger = (
+				<Aux>
+					<Burger ingredients={props.ings} />
+					<BuildControls
+						ingredientAdded={props.onIngredientAdded}
+						ingredientRemoved={props.onIngredientRemoved}
+						disabled={disabledInfo}
+						purchasable={updatePurchaseState(props.ings)}
+						ordered={purchaseHandler}
+						price={props.price}
+					/>
+				</Aux>
+			);
+			orderSummary = (
+				<OrderSummary
+					ingredients={props.ings}
+					price={props.price}
+					purchaseCancelled={purchaseCancelHandler}
+					purchaseContinued={purchaseContinueHandler}
+				/>
+			);
+		}
+		// {salad: true, meat: false, ...}
+		return (
+			<Aux>
+				<Modal show={state.purchasing} modalClosed={purchaseCancelHandler}>
+					{orderSummary}
+				</Modal>
+				{burger}
+			</Aux>
+		);
+	}),
+	axios
+);
+
+const mapStateToProps = (state) => {
+	return {
+		ings: state.burgerBuilder.ingredients,
+		price: state.burgerBuilder.totalPrice,
+		error: state.burgerBuilder.error
+	};
 };
 
-export default withErrorHandler ((props)=> {
-	const [ ingredients, setIngredients ] = useState(null);
-	const [ price, setPrice ] = useState(4);
-	const [ purchasable, setPurchasable ] = useState(false);
-	const [ purchasing, setPurchasing ] = useState(false);
-	const [ loading, setLoading ] = useState(false);
-	const [ error, setError ] = useState(false);
-
-	useEffect(() => {
-		setLoading(true);
-		console.log('Burgerbuilder ', props);
-		axios
-			.get('/ingredients.json')
-			.then((response) => {
-				setIngredients(response.data);
-				setLoading(false);
-			})
-			.catch((error) => {
-				setError(true);
-				setLoading(false);
-			});
-	}, []);
-
-	const updatePurchaseState = (ingredients) => {
-		const sum = Object.values(ingredients).reduce((acc, elem) => {
-			return acc + elem;
-		}, 0);
-
-		setPurchasable(sum > 0); // This is either true/false
+const mapDispatchToProps = (dispatch) => {
+	return {
+		onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
+		onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
+		onInitIngredients: () => dispatch(actions.initIngredients()),
+		onInitPurchase: () => dispatch(actions.purchaseInit())
 	};
-
-	const purchaseHandler = () => {
-		setPurchasing(true);
-	};
-
-	const purchaseCanselHandler = () => {
-		setPurchasing(false);
-	};
-
-	const purchaseContinueHandler = () => {
-		// const order = {
-		// 	ingredients: ingredients,
-		// 	price: price,
-		// 	customer: {
-		// 		name: 'Foti',
-		// 		address: {
-		// 			street: 'testStreet 1',
-		// 			zipCode: '2356',
-		// 			country: 'Greece'
-		// 		},
-		// 		email: 'test@otest.com'
-		// 	},
-		// 	deliveryMethod: 'fastest'
-		// };
-		// setLoading(true);
-
-		// axios
-		// 	.post('/orders.json', order)
-		// 	.then(() => {
-		// 		setLoading(false);
-		// 		setPurchasing(false);
-		// 	})
-		// 	.catch((error) => console.log(error));
-
-		const queryParams = [];
-		// get the ingredients and store them in an array
-		for (const i in ingredients) {
-			if (ingredients.hasOwnProperty(i)) {
-				queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i]));
-			}
-		}
-		// We need the price for the Checkout. So we push it here:
-		queryParams.push('price=' + price);
-		// save the ingredients as a string and assign it to the search query
-		const queryString = queryParams.join('&');
-		props.history.push({
-			pathname: '/checkout',
-			search: '?' + queryString
-		});
-	};
-
-	const addIngredientHandler = (type) => {
-		const updatedIngredients = {
-			...ingredients,
-			...(ingredients[type] = ingredients[type] + 1)
-		};
-		setIngredients(updatedIngredients);
-		setPrice(price + INGREDIENT_PRICES[type]);
-		updatePurchaseState(updatedIngredients);
-	};
-
-	const removeIngredientHandler = (type) => {
-		const updatedIngredients = {
-			...ingredients,
-			...(ingredients[type] = ingredients[type] - 1)
-		};
-		setIngredients(updatedIngredients);
-		setPrice(price - INGREDIENT_PRICES[type]);
-		updatePurchaseState(updatedIngredients);
-	};
-
-	// This is for the less button. So values don't get a minus value.
-	const disabledInfo = {
-		...ingredients
-	};
-	for (let key in disabledInfo) {
-		disabledInfo[key] = disabledInfo[key] <= 0;
-	}
-
-	let orderSummary = (
-		<OrderSummary
-			ingredients={ingredients}
-			price={price}
-			purchasable={purchasable}
-			purchaseCanselled={purchaseCanselHandler}
-			purchaseContinued={purchaseContinueHandler}
-		/>
-	);
-	// This is for waiting untill we load the ings from the server
-	if (loading || !ingredients) {
-		orderSummary = <Spinner />;
-	}
-	// This is for waiting untill we load the ings from the server
-	let burger = <Burger ingredients={ingredients} purchasable={purchasable} />;
-	if (!ingredients && !error) {
-		burger = <Spinner />;
-	} else if (error) {
-		burger = (
-			<div style={{ marginTop: '20vh', textAlign: 'center' }}>
-				<h1>Ingredients can't be loaded.</h1>
-				<p>Please check internet connection.</p>
-			</div>
-		);
-	}
-	return (
-		<Aux>
-			<Modal show={purchasing} modalClosed={purchaseCanselHandler}>
-				{orderSummary}
-			</Modal>
-			{burger}
-			<BuildControls
-				ingredientAdded={addIngredientHandler}
-				ingredientRemoved={removeIngredientHandler}
-				disabled={disabledInfo}
-				price={price}
-				purchasable={purchasable}
-				purchasing={purchaseHandler}
-			/>
-		</Aux>
-	);
-}
-, axios) 
-
+};
