@@ -7,3 +7,5 @@ We use:
 * React Hooks,
 * Object destructuring in props,
 * `index.js` for all files (in their particular folder) and we export them like: `export default () => {...}`
+
+We stoped at Section 15 (Adding Redux).
